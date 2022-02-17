@@ -6,6 +6,8 @@ const ExpenseForm = (props) => {
     const [enteredTitle, setEnteredTitle] = useState('');
     const [enteredAmount, setEnteredAmoumt] = useState('');
     const [enteredDate, setEnteredDate] = useState(''); 
+    const [formStyle, setFormStyle] = useState({display:'none'});
+    const [addExpenseBtnStyle, setAddExpenseBtnStyle] = useState({display:''});
 
     //this is also used when we have to store multiples states
     //but you have to save all the states to avoid they get lost 
@@ -36,6 +38,12 @@ const ExpenseForm = (props) => {
         setEnteredDate(event.target.value);
     };
 
+    const addExpenseHandler = () => {
+        console.log('button pressed!');
+        setFormStyle({display:''})
+        setAddExpenseBtnStyle({display:'none'});
+    }
+
     const submitHandler = (event) => {
         event.preventDefault();//stop default behaviour for browser of sending the form to the server
         
@@ -49,39 +57,52 @@ const ExpenseForm = (props) => {
         setEnteredTitle('');
         setEnteredAmoumt('');
         setEnteredDate('');
+
+        //reset form view 
+        setAddExpenseBtnStyle({display:''});
+        setFormStyle({display:'none'});
     };
 
-    return <form onSubmit={submitHandler}>
-        <div className="new-expense__controls">
-            <div className="new-expense__control">
-                <label>Title</label>
-                <input 
-                    type='text' 
-                    value={enteredTitle} 
-                    onChange={titleChangeHandler}
-                />
+    return (
+            <div>
+                <div className='new-expense__actions' style={addExpenseBtnStyle}>
+                    <button onClick={addExpenseHandler} >Add New Expense</button>
+                </div>
+                <div style={formStyle} >
+                    <form onSubmit={submitHandler}>
+                        <div className="new-expense__controls">
+                            <div className="new-expense__control">
+                                <label>Title</label>
+                                <input 
+                                    type='text' 
+                                    value={enteredTitle} 
+                                    onChange={titleChangeHandler}
+                                />
+                            </div>
+                            <div className="new-expense__control">
+                                <label>Amount</label>
+                                <input type='number' 
+                                min='0.02' 
+                                step='0.01' 
+                                value={enteredAmount} 
+                                onChange={amountChangeHandler}/>
+                            </div>
+                            <div className="new-expense__control">
+                                <label>Date</label>
+                                <input type='date' 
+                                min='2019-01-01' 
+                                step='2022-02-28' 
+                                value={enteredDate}  
+                                onChange={dateChangeHandler} />
+                            </div>
+                        </div>
+                        <div className='new-expense__actions'>
+                            <button type='submit' >Add Expense</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div className="new-expense__control">
-                <label>Amount</label>
-                <input type='number' 
-                min='0.02' 
-                step='0.01' 
-                value={enteredAmount} 
-                onChange={amountChangeHandler}/>
-            </div>
-            <div className="new-expense__control">
-                <label>Date</label>
-                <input type='date' 
-                min='2019-01-01' 
-                step='2022-02-28' 
-                value={enteredDate}  
-                onChange={dateChangeHandler} />
-            </div>
-        </div>
-        <div className='new-expense__actions'>
-            <button type='submit' >Add Expense</button>
-        </div>
-    </form>
+    );
 };
 
 export default ExpenseForm;
