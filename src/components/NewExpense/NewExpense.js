@@ -1,10 +1,18 @@
 //optional
-import React from "react";
+import React, { useState } from "react";
 import ExpenseForm from "./ExpenseForm";
 
 import './NewExpense.css';
 
+
 const NewExpense = (props) => {
+    
+    const [isEditing, setIsEditing] = useState(false);
+    const addExpenseHandler = () => {
+        setIsEditing(true);
+    }
+    const stopEditingHandler =() =>
+        setIsEditing(false);
 
     //the way to pass data from child to parent
     //we pass a function pointer to the child that is executed in the parent
@@ -14,12 +22,14 @@ const NewExpense = (props) => {
             ...enteredExpenseData,            
         };
         props.onAddExpense(expenseData);
+        setIsEditing(false);
     };
 
     //the way to pass data from child to parent
     //we pass a function pointer to the child that is executed in the parent
     return <div className="new-expense">
-        <ExpenseForm onSaveExpenseData = {saveExpenseDataHandler} />
+        {!isEditing && <button onClick={addExpenseHandler} >Add New Expense</button>}
+        {isEditing && <ExpenseForm onSaveExpenseData = {saveExpenseDataHandler} onCancel={stopEditingHandler} />}
     </div>
     
 };
